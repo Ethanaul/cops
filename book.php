@@ -3,7 +3,7 @@
  * COPS (Calibre OPDS PHP Server) class file
  *
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * @author     Sébastien Lucas <sebastien@slucas.fr>
+ * @author     Sï¿½bastien Lucas <sebastien@slucas.fr>
  */
 
 require_once('base.php');
@@ -47,7 +47,8 @@ define ('SQL_BOOKS_RECENT', "select {0} from books " . SQL_BOOKS_LEFT_JOIN . "
                                                     where 1=1 {1} order by timestamp desc limit ");
 define ('SQL_BOOKS_BY_RATING', "select {0} from books " . SQL_BOOKS_LEFT_JOIN . "
                                                     where books_ratings_link.book = books.id and ratings.id = ? {1} order by sort");
-
+define ('SQL_BOOKS_BY_DAYS', "select {0} from books " . SQL_BOOKS_LEFT_JOIN . "
+                                                    where timestamp >= (select datetime('now', '-{1} day)) order by timestamp desc");
 class Book extends Base {
     const ALL_BOOKS_UUID = "urn:uuid";
     const ALL_BOOKS_ID = "cops:books";
@@ -66,6 +67,7 @@ class Book extends Base {
     const SQL_BOOKS_QUERY = SQL_BOOKS_QUERY;
     const SQL_BOOKS_RECENT = SQL_BOOKS_RECENT;
     const SQL_BOOKS_BY_RATING = SQL_BOOKS_BY_RATING;
+    const SQL_BOOKS_BY_DAYS = SQL_BOOKS_BY_DAYS;
 
     const BAD_SEARCH = "QQQQQ";
 
@@ -456,6 +458,10 @@ class Book extends Base {
 
     public static function getBooksByRating($ratingId, $n) {
         return self::getEntryArray (self::SQL_BOOKS_BY_RATING, array ($ratingId), $n);
+    }
+    
+    public static function getBooksByDays($days, $n) {
+        return self::getEntryArray(self::SQL_BOOK_BY_DAYS, array ($days), $n);   
     }
 
     public static function getBooksByPublisher($publisherId, $n) {
