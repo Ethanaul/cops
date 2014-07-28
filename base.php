@@ -546,6 +546,8 @@ class Page
                 return new PageAbout ($id, $query, $n);
             case Base::PAGE_CUSTOMIZE :
                 return new PageCustomize ($id, $query, $n);
+            case  Base::PAGE_BYDAYS_BOOKS :
+                return new PageBooksByDays ($id, $query, $n);
             default:
                 $page = new Page ($id, $query, $n);
                 $page->idPage = "cops:catalog";
@@ -858,6 +860,17 @@ class PageRecentBooks extends Page
     }
 }
 
+
+class PageRecentBooks extends Page
+{
+    public function InitializeContent ()
+    {
+        $this->title = localize ("recent.title");
+        $this->entryArray = Book::getBooksByDays ();
+        $this->idPage = Book::PAGE_BYDAYS_BOOKS;
+    }
+}
+
 class PageQueryResult extends Page
 {
     const SCOPE_TAG = "tag";
@@ -1151,6 +1164,7 @@ abstract class Base
     const PAGE_PUBLISHER_DETAIL = "21";
     const PAGE_ALL_RATINGS = "22";
     const PAGE_RATING_DETAIL = "23";
+    const PAGE_BYDAYS_BOOKS = "24";
 
     const COMPATIBILITY_XML_ALDIKO = "aldiko";
 
